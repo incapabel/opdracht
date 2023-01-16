@@ -1,0 +1,27 @@
+controllers:
+    resource: ../src/Controller/
+    type: attribute
+
+weather-forecast-temps:
+    path: /api/weather-forecasts/temps
+    controller: App\Controller\ApiController::weatherForecastsTemps
+
+weather-forecast-rain:
+    path: /api/weather-forecasts/rain
+    controller: App\Controller\ApiController::weatherForecastsRain
+
+weather-forecast-fog:
+    path: /api/weather-forecasts/fog
+    controller: App\Controller\ApiController::weatherForecastsFog
+
+weather-forecast-temps-timestamp:
+    path: /api/weather-forecasts/temps/{timestamp}
+    controller: App\Controller\ApiController::weatherForecastsTempsByTimestamp
+
+weather-forecast-rain-timestamp:
+    path: /api/weather-forecasts/rain/{timestamp}
+    controller: App\Controller\ApiController::weatherForecastsRainByTimestamp
+
+weather-forecast-fog-timestamp:
+    path: /api/weather-forecasts/fog/{timestamp}
+    controller: App\Controller\ApiController::weatherForecastsFogByTimestamp

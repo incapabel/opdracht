@@ -1,0 +1,69 @@
+version: '3.7'
+
+services:
+  nginx:
+    container_name: nginx
+    build:
+      dockerfile: Dockerfile-nginx
+    ports:
+      - "3000:3000"
+    networks:
+      - symfony
+  fpm:
+    container_name: php-fpm-8.1
+    build:
+      dockerfile: Dockerfile-php
+    networks:
+      - symfony
+    volumes:
+      - ./symfony/config/:/var/www/project/symfony/config/
+      - ./symfony/src:/var/www/project/symfony/src/
+      - ./symfony/templates/:/var/www/project/symfony/templates/
+      - ./symfony/vendor/:/var/www/project/symfony/vendor/
+    depends_on:
+      - nginx
+      - database
+  vuetify:
+    container_name: vuetify-nodejs
+    build:
+      dockerfile: Dockerfile-vuetify
+    ports:
+      - "80:8080"
+      - "9229:9229"
+      - "9230:9230"
+    networks:
+     - symfony
+    volumes:
+      - ./vuetify/node_modules/:/var/www/project/vuetify/node_modules/
+      - ./vuetify/src/:/var/www/project/vuetify/src/
+      - ./vuetify/package.json:/var/www/project/vuetify/package.json
+      - ./vuetify/package-lock.json:/var/www/project/vuetify/package-lock.json
+    environment:
+      - NODE_ENV=development
+    depends_on:
+      - fpm
+  database:
+    restart: always
+    image: 'mysql:latest'
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    ports:
+      - "3306:3306"
+    networks:
+      - symfony
+    volumes:
+      - ./mysql:/var/lib/mysql
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - "3060:8080"
+    networks:
+     - symfony
+    depends_on:
+      - database
+
+networks:
+  symfony:

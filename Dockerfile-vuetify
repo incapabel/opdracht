@@ -1,0 +1,21 @@
+FROM node:lts
+
+ARG NODE_ENV=production
+ENV NODE_ENV $NODE_ENV
+
+EXPOSE 8080 9229 9230
+
+WORKDIR /var/www/project/vuetify
+
+COPY ./vuetify ./
+
+RUN npm install npm@latest -g
+
+RUN npm install -g @vue/cli @vue/cli-service --save-dev
+
+RUN npm install -g http-server
+
+RUN npm install
+
+#CMD [ "http-server", "dist" ]
+CMD ["npm", "run", "serve"]
